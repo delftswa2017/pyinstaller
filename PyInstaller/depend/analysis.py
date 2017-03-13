@@ -529,14 +529,14 @@ class PyiModuleGraph(ModuleGraph):
         :return: Code objects that might be scanned for module dependencies.
         """
         co_dict = {}
+        pure_python_module_types = PURE_PYTHON_MODULE_TYPES | {'Script',}
         node = self.findNode('ctypes')
         if node:
             referers = self.getReferers(node)
             for r in referers:
                 r_ident =  r.identifier
-                r_type = type(node).__name__
                 # Ensure that modulegraph objects has attribute 'code'.
-                if r_type in PURE_PYTHON_MODULE_TYPES:
+                if type(r).__name__ in pure_python_module_types:
                     if r_ident == 'ctypes' or r_ident.startswith('ctypes.'):
                         # Skip modules of 'ctypes' package.
                         continue
